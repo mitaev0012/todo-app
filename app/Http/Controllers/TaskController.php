@@ -40,14 +40,20 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'name' => 'required|max:100',
+        ], [
+            'name.required' => 'タスク名を入力してください。',
+            'name.max'      => 'タスク名は100文字以内で入力してください。',
+        ]);
+
         Task::create([
-            'name'   => $request->input('name'),
+            'name'   => $validated['name'],
             'status' => false,
         ]);
 
         return redirect()->route('tasks.index');
     }
-
     /**
      * Display the specified resource.
      *

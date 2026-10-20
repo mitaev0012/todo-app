@@ -5,14 +5,18 @@
 
 @section('content')
     <h1 class="page-title">今日は何をする？</h1>
+        
         {{-- 追加フォーム --}}
     <div class="card">
         <form action="{{ route('tasks.store') }}" method="post">
             @csrf
             <div class="form-row">
-                <input type="text" name="name" placeholder="洗濯物をたたむ...">
+                <input type="text" name="name" value="{{ old('name') }}" placeholder="洗濯物をたたむ...">
                 <button type="submit">追加する</button>
             </div>
+            @error('name')
+                <p class="error">{{ $message }}</p>
+            @enderror
         </form>
     </div>
     <p>登録件数：{{ $tasks->count() }} 件</p>
