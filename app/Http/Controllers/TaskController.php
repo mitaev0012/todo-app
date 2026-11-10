@@ -15,6 +15,9 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::orderBy('created_at', 'asc')->get();
+         $tasks = Task::where('status', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('tasks.index', compact('tasks'));
     }
@@ -97,5 +100,24 @@ class TaskController extends Controller
     public function destroy($id)
     {
         //
+    }
+        /**
+     * PATCH /tasks/{id}/complete  完了にする
+     */
+    public function complete($id)
+    {
+        $task = Task::findOrFail($id);
+        $task->status = true;
+        $task->save();
+
+        return redirect()->route('tasks.index');
+    }
+    public function undo($id)
+    {
+        $task = Task::findOrFail($id);
+        $task->status = false; // 未完了（false）にする
+        $task->save();
+
+        return redirect()->route('tasks.index');
     }
 }
